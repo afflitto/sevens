@@ -5,6 +5,8 @@ let font;
 let board;
 let moving = false;
 
+let gameOverMessage = null;
+
 function preload() {
   font = loadFont('assets/8-BITWONDER.TTF');
 }
@@ -20,12 +22,24 @@ function draw() {
   drawGrid(4, 4, tileSize, sidelineSize);
   board.draw();
 
-  if(board.gameIsOver()){
-    console.log(board.gameIsOver());
+  gameOverMessage = board.gameIsOver();
 
+  if(gameOver){
     //tint
-    fill(0, 0, 0, 80);
+    fill(0, 0, 0, 150);
     rect(0, 0, 4 * tileSize, 4* tileSize + 2 * sidelineSize);
+
+    fill(0);
+    stroke(255);
+    rect(90, 250, 220, 100);
+
+    fill(255);
+    noStroke();
+
+    textSize(18);
+    textFont(font);
+    textAlign(CENTER);
+    text(gameOverMessage, 200, 280);
   }
 }
 
@@ -48,25 +62,29 @@ function keyPressed() {
 }
 
 function mousePressed() {
-  if(mouseY < sidelineSize) { //white sideline
-    const piece = board.getWhiteSidelinePiece()
-    if(piece) {
-      piece.isMoving = true;
-    }
-  } else if(mouseY > 4*tileSize + sidelineSize) { //blackSideline
-    const piece = board.getBlackSidelinePiece()
-    if(piece) {
-      piece.isMoving = true;
-    }
-  } else { //game
-    const x = floor(mouseX / tileSize);
-    const y = floor((mouseY - sidelineSize) / tileSize);
+  if(gameOverMessage) {
+    board.newGame();
+  } else {
+    if(mouseY < sidelineSize) { //white sideline
+      const piece = board.getWhiteSidelinePiece()
+      if(piece) {
+        piece.isMoving = true;
+      }
+    } else if(mouseY > 4*tileSize + sidelineSize) { //blackSideline
+      const piece = board.getBlackSidelinePiece()
+      if(piece) {
+        piece.isMoving = true;
+      }
+    } else { //game
+      const x = floor(mouseX / tileSize);
+      const y = floor((mouseY - sidelineSize) / tileSize);
 
-    console.log(x, y)
+      console.log(x, y)
 
-    const piece = board.getPieceAt(x, y);
-    if(piece) {
-      piece.isMoving = true;
+      const piece = board.getPieceAt(x, y);
+      if(piece) {
+        piece.isMoving = true;
+      }
     }
   }
 }

@@ -4,6 +4,9 @@ class Board {
   }
 
   newGame() {
+    //re-init array
+    this.pieces = [];
+
     //7 white pieces
     for(let i = 0; i < 7; i++) {
       this.pieces.push(new Piece(true, false));
@@ -115,11 +118,11 @@ class Board {
 
     const reducer = (acc, val) => acc = acc || val == 4;
     if(numWhiteRows.reduce(reducer, false) || numWhiteCols.reduce(reducer, false) || numWhiteDiags.reduce(reducer, false)) {
-      return "Game over. White wins!";
+      return "Game over\n\nWhite wins";
     }
 
     if(numBlackRows.reduce(reducer, false) || numBlackCols.reduce(reducer, false) || numBlackDiags.reduce(reducer, false)) {
-      return "Game over. Black wins!";
+      return "Game over\n\nBlack wins";
     }
   }
 }
