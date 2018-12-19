@@ -24,7 +24,7 @@ function draw() {
 
   gameOverMessage = board.gameIsOver();
 
-  if(gameOver){
+  if(gameOverMessage){
     //tint
     fill(0, 0, 0, 150);
     rect(0, 0, 4 * tileSize, 4* tileSize + 2 * sidelineSize);
