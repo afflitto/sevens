@@ -1,9 +1,13 @@
 const tileSize = 100;
 const sidelineSize = 100;
 
+let font;
 let board;
-
 let moving = false;
+
+function preload() {
+  font = loadFont('assets/8-BITWONDER.TTF');
+}
 
 function setup() {
   createCanvas(4 * tileSize, 4 * tileSize + 2*sidelineSize);
