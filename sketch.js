@@ -7,6 +7,8 @@ let moving = false;
 
 let gameOverMessage = null;
 
+let whiteTurn = Math.random() > 0.5; //decide 1st turn randomly
+
 function preload() {
   font = loadFont('assets/8-BITWONDER.TTF');
 }
@@ -65,12 +67,12 @@ function mousePressed() {
   if(gameOverMessage) {
     board.newGame();
   } else {
-    if(mouseY < sidelineSize) { //white sideline
+    if(mouseY < sidelineSize && whiteTurn) { //white sideline
       const piece = board.getWhiteSidelinePiece()
       if(piece) {
         piece.isMoving = true;
       }
-    } else if(mouseY > 4*tileSize + sidelineSize) { //blackSideline
+    } else if(mouseY > 4*tileSize + sidelineSize && !whiteTurn) { //blackSideline
       const piece = board.getBlackSidelinePiece()
       if(piece) {
         piece.isMoving = true;
@@ -79,10 +81,8 @@ function mousePressed() {
       const x = floor(mouseX / tileSize);
       const y = floor((mouseY - sidelineSize) / tileSize);
 
-      console.log(x, y)
-
       const piece = board.getPieceAt(x, y);
-      if(piece) {
+      if(piece && piece.white == whiteTurn) {
         piece.isMoving = true;
       }
     }
@@ -97,6 +97,8 @@ function mouseReleased() {
     if(piece.validMove(newPosition.x, newPosition.y)) {
       piece.matrixPosition = newPosition;
       piece.isInPlay = true;
+
+      whiteTurn = !whiteTurn; //toggle who's turn it is
     } else {
       console.error('invalid')
     }
