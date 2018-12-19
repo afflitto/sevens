@@ -1,7 +1,9 @@
 const tileSize = 100;
 const sidelineSize = 100;
 
-let board
+let board;
+
+let moving = false;
 
 function setup() {
   createCanvas(4 * tileSize, 4 * tileSize + 2*sidelineSize);
@@ -13,6 +15,10 @@ function draw() {
   background(100);
   showGrid(4, 4, tileSize, sidelineSize);
   board.draw();
+
+  if(board.gameIsOver()){
+    console.log(board.gameIsOver());
+  }
 }
 
 function showGrid(x, y, tileSize, sidelineSize) {
@@ -34,27 +40,40 @@ function keyPressed() {
 }
 
 function mousePressed() {
-  var x = floor(mouseX / tileSize);
-  var y = floor(mouseY / tileSize);
-  if (!test.isDone()) {
-    if (!moving) {
-      movingPiece = test.getPieceAt(x, y);
-      if (movingPiece != null && movingPiece.white == whitesMove) {
-
-        movingPiece.movingThisPiece = true;
-      } else {
-        return;
-      }
-    } else {
-      if (movingPiece.canMove(x, y, test)) {
-        movingPiece.move(x, y, test);
-        movingPiece.movingThisPiece = false;
-        whitesMove = !whitesMove;
-      } else {
-        movingPiece.movingThisPiece = false;
-
-      }
+  if(mouseY < sidelineSize) { //white sideline
+    const piece = board.getWhiteSidelinePiece()
+    if(piece) {
+      piece.isMoving = true;
     }
-    moving = !moving;
+  } else if(mouseY > 4*tileSize + sidelineSize) { //blackSideline
+    const piece = board.getBlackSidelinePiece()
+    if(piece) {
+      piece.isMoving = true;
+    }
+  } else { //game
+    const x = floor(mouseX / tileSize);
+    const y = floor((mouseY - sidelineSize) / tileSize);
+
+    console.log(x, y)
+
+    const piece = board.getPieceAt(x, y);
+    if(piece) {
+      piece.isMoving = true;
+    }
+  }
+}
+
+function mouseReleased() {
+  const piece = board.getMoving();
+  if(piece){
+    piece.isMoving = false;
+    const newPosition = createVector(floor(mouseX / tileSize), floor((mouseY - sidelineSize) / tileSize));
+    if(piece.validMove(newPosition.x, newPosition.y)) {
+      piece.matrixPosition = newPosition;
+      piece.isInPlay = true;
+    } else {
+      console.error('invalid')
+    }
+
   }
 }
