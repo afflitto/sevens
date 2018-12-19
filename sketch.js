@@ -22,6 +22,10 @@ function draw() {
 
   if(board.gameIsOver()){
     console.log(board.gameIsOver());
+
+    //tint
+    fill(0, 0, 0, 80);
+    rect(0, 0, 4 * tileSize, 4* tileSize + 2 * sidelineSize);
   }
 }
 
