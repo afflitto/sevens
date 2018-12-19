@@ -43,6 +43,22 @@ function draw() {
     textAlign(CENTER);
     text(gameOverMessage, 200, 280);
   }
+
+  //Draw "YOUR TURN" text
+  fill(0);
+  noStroke();
+  textSize(18);
+  textFont(font);
+  textAlign(CENTER);
+  if(whiteTurn) {
+    push();
+    translate(200, 10);
+    rotate(PI);
+    text("YOUR TURN", 0, 0);
+    pop();
+  } else {
+    text("YOUR TURN", 200, 590);
+  }
 }
 
 function drawGrid(x, y, tileSize, sidelineSize) {
