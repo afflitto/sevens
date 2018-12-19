@@ -12,8 +12,8 @@ function setup() {
 }
 
 function draw() {
-  background(100);
-  showGrid(4, 4, tileSize, sidelineSize);
+  background(153, 0, 51);
+  drawGrid(4, 4, tileSize, sidelineSize);
   board.draw();
 
   if(board.gameIsOver()){
@@ -21,7 +21,7 @@ function draw() {
   }
 }
 
-function showGrid(x, y, tileSize, sidelineSize) {
+function drawGrid(x, y, tileSize, sidelineSize) {
   for (var i = 0; i < x; i++) {
     for (var j = 0; j < y; j++) {
       if ((i + j) % 2 == 1) {
