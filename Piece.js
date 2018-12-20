@@ -60,4 +60,46 @@ class Piece {
     }
     return false;
   }
+
+  validJump() {
+    if(matrixPosition) {
+      const x = this.matrixPosition.x;
+      const y = this.matrixPosition.y;
+
+      if(x <= 1 && y <= 1) {
+        if(!board.getPieceAt(x+2, y) && board.getPieceAt(x+1, y).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x, y+2) && board.getPieceAt(x, y+1).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x+2, y+2) && board.getPieceAt(x+1, y+1).white != this.white) {
+          return true
+        }
+      } else if(x <= 1 && y >= 2) {
+        if(!board.getPieceAt(x+2, y) && board.getPieceAt(x+1, y).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x, y-2) && board.getPieceAt(x, y-1).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x+2, y-2) && board.getPieceAt(x+1, y-1).white != this.white) {
+          return true
+        }
+      } else if(x >= 2  && y <= 1) {
+        if(!board.getPieceAt(x-2, y) && board.getPieceAt(x-1, y).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x, y+2) && board.getPieceAt(x, y+1).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x-2, y+2) && board.getPieceAt(x-1, y+1).white != this.white) {
+          return true
+        }
+      } else if(x >= 2  && y >= 2) {
+        if(!board.getPieceAt(x-2, y) && board.getPieceAt(x-1, y).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x, y-2) && board.getPieceAt(x, y-1).white != this.white) {
+          return true
+        } else if(!board.getPieceAt(x-2, y-2) && board.getPieceAt(x-1, y-1).white != this.white) {
+          return true
+        }
+      }
+    }
+    return false;
+  }
 }

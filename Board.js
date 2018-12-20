@@ -32,28 +32,28 @@ class Board {
     whiteSideline.forEach((piece, index) => {
       fill(255);
       stroke(0);
-      ellipse((index * tileSize * 4)/7 + 29, sidelineSize/2,  35);
+      ellipse((index * tileSize * 4)/7 + (tileSize * 4 / 7 / 2) + windowWidth/2 - tileSize * 2, windowHeight/2 - tileSize*2.5,  tileSize*0.35);
     });
 
     const blackSideline = this.pieces.filter(piece => !piece.isInPlay && !piece.white && !piece.isMoving && !piece.taken);
     blackSideline.forEach((piece, index) => {
       fill(0);
       stroke(255);
-      ellipse((index * tileSize * 4)/7 + 29, 500 + sidelineSize/2,  35);
+      ellipse((index * tileSize * 4)/7 + (tileSize * 4 / 7 / 2) + windowWidth/2 - tileSize * 2, windowHeight/2 + tileSize*2.5,  35);
     });
 
     const whiteInPlay = this.pieces.filter(piece => piece.isInPlay && piece.white && !piece.isMoving);
     whiteInPlay.forEach(piece => {
       fill(255);
       stroke(0);
-      ellipse(piece.matrixPosition.x * tileSize + tileSize / 2, sidelineSize + piece.matrixPosition.y * tileSize + tileSize / 2, tileSize*0.5)
+      ellipse(windowWidth/2 + piece.matrixPosition.x * tileSize - 1.5*tileSize, windowHeight/2 + piece.matrixPosition.y * tileSize - 1.5*tileSize, tileSize*0.5)
     });
 
     const blackInPlay = this.pieces.filter(piece => piece.isInPlay && !piece.white && !piece.isMoving);
     blackInPlay.forEach(piece => {
       fill(0);
       stroke(255);
-      ellipse(piece.matrixPosition.x * tileSize + tileSize / 2, sidelineSize +  piece.matrixPosition.y * tileSize + tileSize / 2, tileSize*0.5)
+      ellipse(windowWidth/2 + piece.matrixPosition.x * tileSize - 1.5*tileSize, windowHeight/2 + piece.matrixPosition.y * tileSize - 1.5*tileSize, tileSize*0.5)
     });
 
     const movingPieces = this.pieces.filter(piece => piece.isMoving);
@@ -79,10 +79,10 @@ class Board {
 
   gameIsOver() {
     if(this.pieces.filter(piece => piece.white && !piece.taken).length == 0) {
-      return "Game over. Black wins!";
+      return "Game over\n\nBlack wins";
     }
     if(this.pieces.filter(piece => !piece.white && !piece.taken).length == 0) {
-      return "Game over. White wins!";
+      return "Game over\n\nWhite wins";
     }
 
     const numWhiteRows = [0, 0, 0, 0];

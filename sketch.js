@@ -1,8 +1,7 @@
-const tileSize = 100;
-const sidelineSize = 100;
-
 let font;
 let board;
+let tileSize;
+let tableWidth;
 let moving = false;
 
 let gameOverMessage = null;
@@ -14,14 +13,27 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(4 * tileSize, 4 * tileSize + 2*sidelineSize);
+  if(windowHeight < 1.5*windowWidth) {
+    tileSize = windowHeight / 6;
+  } else {
+    tileSize = windowWidth / 4;
+  }
+
+  tableWidth = tileSize*4;
+  tableHeight = tileSize*6;
+
+  console.log(tileSize);
+
+  //createCanvas(4 * tileSize, 4 * tileSize + 2*sidelineSize);
+  createCanvas(windowWidth, windowHeight);
   board = new Board();
   board.newGame();
 }
 
 function draw() {
-  background(153, 0, 51);
-  drawGrid(4, 4, tileSize, sidelineSize);
+  background(0);
+  //background(153, 0, 51);
+  drawGrid(4, 4, tileSize, tileSize);
   board.draw();
 
   gameOverMessage = board.gameIsOver();
@@ -29,11 +41,12 @@ function draw() {
   if(gameOverMessage){
     //tint
     fill(0, 0, 0, 150);
-    rect(0, 0, 4 * tileSize, 4* tileSize + 2 * sidelineSize);
+    noStroke();
+    rect(0, 0, windowWidth, windowHeight);
 
     fill(0);
     stroke(255);
-    rect(90, 250, 220, 100);
+    rect(windowWidth/2 - 110, windowHeight/2 - 50, 220, 100);
 
     fill(255);
     noStroke();
@@ -41,7 +54,7 @@ function draw() {
     textSize(18);
     textFont(font);
     textAlign(CENTER);
-    text(gameOverMessage, 200, 280);
+    text(gameOverMessage, windowWidth/2, windowHeight/2 - 20);
   }
 
   //Draw "YOUR TURN" text
@@ -52,16 +65,22 @@ function draw() {
   textAlign(CENTER);
   if(whiteTurn) {
     push();
-    translate(200, 10);
+    translate(windowWidth/2, windowHeight/2 - 3*tileSize + 10);
     rotate(PI);
     text("YOUR TURN", 0, 0);
     pop();
   } else {
-    text("YOUR TURN", 200, 590);
+    text("YOUR TURN", windowWidth/2, windowHeight/2 + 3*tileSize - 10);
   }
 }
 
 function drawGrid(x, y, tileSize, sidelineSize) {
+  //draw sidelines
+  fill(153, 0, 51);
+  noStroke();
+  rect((windowWidth - tableWidth) / 2, (windowHeight - tableHeight) / 2, tableWidth, tableHeight);
+
+  //draw table
   for (var i = 0; i < x; i++) {
     for (var j = 0; j < y; j++) {
       if ((i + j) % 2 == 1) {
@@ -70,7 +89,7 @@ function drawGrid(x, y, tileSize, sidelineSize) {
         fill(240);
       }
       noStroke();
-      rect(i * tileSize, sidelineSize + j * tileSize, tileSize, tileSize);
+      rect(windowWidth/2 + (i - x/2) * tileSize, windowHeight/2 + (j - y/2) * tileSize, tileSize, tileSize);
     }
   }
 }
@@ -83,19 +102,19 @@ function mousePressed() {
   if(gameOverMessage) {
     board.newGame();
   } else {
-    if(mouseY < sidelineSize && whiteTurn) { //white sideline
+    if(mouseY < (windowHeight/2 - 2*tileSize) && whiteTurn) { //white sideline
       const piece = board.getWhiteSidelinePiece()
       if(piece) {
         piece.isMoving = true;
       }
-    } else if(mouseY > 4*tileSize + sidelineSize && !whiteTurn) { //blackSideline
+    } else if(mouseY > (windowHeight/2 + 2*tileSize) && !whiteTurn) { //blackSideline
       const piece = board.getBlackSidelinePiece()
       if(piece) {
         piece.isMoving = true;
       }
     } else { //game
-      const x = floor(mouseX / tileSize);
-      const y = floor((mouseY - sidelineSize) / tileSize);
+      const x = floor((mouseX - windowWidth/2 + 2*tileSize) / tileSize);
+      const y = floor((mouseY - windowHeight/2 + 2*tileSize) / tileSize);
 
       const piece = board.getPieceAt(x, y);
       if(piece && piece.white == whiteTurn) {
@@ -109,7 +128,7 @@ function mouseReleased() {
   const piece = board.getMoving();
   if(piece){
     piece.isMoving = false;
-    const newPosition = createVector(floor(mouseX / tileSize), floor((mouseY - sidelineSize) / tileSize));
+    const newPosition = createVector(floor((mouseX - windowWidth/2 + 2*tileSize) / tileSize), floor((mouseY - windowHeight/2 + 2*tileSize) / tileSize));
     if(piece.validMove(newPosition.x, newPosition.y)) {
       piece.matrixPosition = newPosition;
       piece.isInPlay = true;
