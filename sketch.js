@@ -6,7 +6,7 @@ let moving = false;
 
 let gameOverMessage = null;
 
-let whiteTurn = Math.random() > 0.5; //decide 1st turn randomly
+let whiteTurn = false;//Math.random() > 0.5; //decide 1st turn randomly
 
 function preload() {
   font = loadFont('assets/8-BITWONDER.TTF');
@@ -133,7 +133,8 @@ function mouseReleased() {
       piece.matrixPosition = newPosition;
       piece.isInPlay = true;
 
-      whiteTurn = !whiteTurn; //toggle who's turn it is
+      //whiteTurn = !whiteTurn; //toggle who's turn it is
+      makeBestMove(board);
     } else {
       console.error('invalid')
     }

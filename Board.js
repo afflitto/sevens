@@ -1,6 +1,6 @@
 class Board {
   constructor() {
-    this.pieces = []; //pieces on the board
+    this.pieces = [];
   }
 
   newGame() {
@@ -124,5 +124,14 @@ class Board {
     if(numBlackRows.reduce(reducer, false) || numBlackCols.reduce(reducer, false) || numBlackDiags.reduce(reducer, false)) {
       return "Game over\n\nBlack wins";
     }
+  }
+
+  clone(){
+    const cloned = new Board();
+    this.pieces.forEach(piece => {
+      const newPiece = new Piece(piece.white, piece.isInPlay, piece.matrixPosition, piece.taken);
+      cloned.pieces.push(newPiece);
+    });
+    return cloned;
   }
 }

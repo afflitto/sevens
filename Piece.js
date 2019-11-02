@@ -1,17 +1,21 @@
 class Piece {
-  constructor(isWhite, isInPlay) {
-    this.matrixPosition = null;
-    this.pixelPosition = null;
-
-    this.taken = false;
+  constructor(isWhite, isInPlay, matrixPosition, taken) {
+    if(matrixPosition) {
+      this.matrixPosition = createVector(matrixPosition.x, matrixPosition.y);
+    } else {
+      this.matrixPosition = null;
+    }
+    this.taken = taken || false;
     this.white = isWhite;
     this.isMoving = false;
-    this.value = 0;
-
     this.isInPlay = isInPlay;
   }
 
   validMove(x, y) {
+    if(this.taken) {
+      return false;
+    }
+
     if(x < 0 || x > 3 || y < 0 || y > 3) { //out of bounds
       return false
     }
@@ -38,8 +42,8 @@ class Piece {
           return false;
         } else if(abs(oldY - y) == 2 && oldX == x) { //vertical jump
           const jumped = board.getPieceAt(x, (oldY + y)/2);
-          console.log(jumped)
           if(jumped && jumped.white != this.white) {
+            console.log('jumped')
             jumped.matrixPosition = null;
             jumped.isInPlay = false;
             jumped.taken = true;
